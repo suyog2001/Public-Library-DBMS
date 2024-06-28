@@ -1,0 +1,188 @@
+create database library_DBMS;
+use library_DBMS;
+CREATE table Library_Members(
+Mem_id int(30) primary key,
+Full_name varchar(30),
+DOB date,
+Email_id varchar(30),
+Mobile int(30),
+Membership_date date
+);
+CREATE table Borrowing(
+Borro_id int(30) primary key,
+Borro_date date,
+Due_date date,
+Return_date date,
+Overdue_Status boolean,
+Mem_id int(30),
+Research_id int(30),
+Edu_Ins_id int(30),
+foreign key (Mem_id) references Library_Members(Mem_id),
+foreign key (Research_id) references Research_Academics(Research_id),
+foreign key (Edu_Ins_id) references Educational_Instit(Edu_Ins_id)
+);
+CREATE table Fines(
+Fine_id int(30) primary key,
+Fine_amount float(3,2),
+Paid_status varchar(30),
+Payment_date Date,
+Borro_id int(30),
+Mem_id int(30),
+Research_id int(30),
+Edu_Ins_id int(30),
+foreign key (Borro_id) references Borrowing(Borro_id),
+foreign key (Mem_id) references Library_Members(Mem_id),
+foreign key (Research_id) references Research_Academics(Research_id),
+foreign key (Edu_Ins_id) references Educational_Instit(Edu_Ins_id)
+);
+CREATE table Research_Academics(
+Research_id int(30) primary key,
+Title varchar(50),
+Institution varchar(50),
+Professor_name varchar(50)
+);
+CREATE table Educational_Instit(
+Edu_Ins_id int(30) primary key,
+Institution_name varchar(30),
+Address varchar(50),
+Contact_number int(13),
+Email_id varchar(20),
+Website varchar(50),
+Affiliation_date date
+);
+CREATE table Authors(
+Author_id int(30) primary key,
+Full_name varchar(30),
+DOB date,
+Nationality varchar(30)
+);
+CREATE table Book_Authors(
+Author_id int(30),
+Book_id int(30),
+foreign key (Author_id) references Authors(Author_id),
+foreign key (Book_id) references Books_Catalog(Book_id)
+);
+CREATE table Books_catalog(
+Book_id int(30) primary key,
+Book_title varchar(50),
+Publisher_Year date,
+B_language varchar(30)
+);
+CREATE table Library_Staff(
+Staff_id int(30) primary key,
+Full_name varchar(30),
+Position varchar(30),
+DOB date,
+Email_id varchar(40),
+Contact_number int(13),
+Hire_date date,
+Address varchar(50)
+);
+CREATE table Suppliers(
+Supplier_id int(30) primary key,
+full_name varchar(50),
+Contact_person varchar(30),
+Contact_number int(13),
+Email_id varchar(30),
+Supplier_type varchar(20),
+Address varchar(50),
+Contract_start_date date,
+Contract_end_date date
+);
+CREATE table Research_articles_papers(
+Re_id int(30) primary key,
+Title varchar(30),
+Institution_id int(30),
+AuthorR_id int(30),
+Publication_date date,
+Access_type varchar(30),
+Document_type varchar(15)
+);
+INSERT INTO Library_Members(Mem_id,Full_name,DOB,Email_id,Mobile,Membership_date) VALUES
+(0111, "Jhon Mekren", '2002-08-12', "jhonmekren@gmail.com", 1458796258, '2025-03-14'),
+(0222, "Sandy Herren", '2003-09-13', "Sandyherren@gmail.com", 1458796259, '2024-04-16'),
+(0333, "Sandy Herren", '2003-09-13', "Sandyherren@gmail.com", 1458796257, '2026-05-15'),
+(0444, "Sandy Herren", '2003-09-13', "Sandyherren@gmail.com", 1458796256, '2027-06-19');
+
+UPDATE Library_Members
+SET Full_name = 'Sandeep Kullun', DOB = '2024-05-01', Email_id = "sandeepkullun@gmail.com"
+WHERE Mem_id = 0333;
+UPDATE Library_Members
+SET Full_name = "Kartik Lampen", DOB = '2025-08-21', Email_id = "kartiklampen@gmail.com"
+WHERE Mem_id = 0333;
+UPDATE Library_Members
+SET Full_name = "Aryan Trichi", DOB = '2026-07-23', Email_id = "aryantrichi@gmail.com"
+WHERE Mem_id = 0444;
+INSERT INTO Research_Academics(Research_id,Title,Institution,Professor_name) VALUES
+(0122, 'AI Future in academics', 'Ambika University', 'Sandeep Govipu'),
+(0133, 'ML functionality for corporate', 'Nalanda University', 'Mihir Chawdhary'),
+(0144, 'Neural Network with human closeness', 'Takshshila University', 'Shantanu Joshi'),
+(0155, 'LLM possiblities and challenges', 'Ratnagiri University', 'Sham Yadav');
+
+INSERT INTO Educational_Instit(Edu_Ins_id,Institution_name,Address,Contact_number,Email_id,Website,Affiliation_date) VALUES
+(0112, 'Sarswati College', 'Raipur', 1478524589, 'sarswati@sacoll.com', Null, '2003-01-01'),
+(0221, 'Tata Education Trust','Mumbai', 1478524587, 'tatatrust@ttco.com', 'Tatatrust.com', '1978-06-10'),
+(0331,'Kashi Education Foundation', 'Kashi', 1478524582, 'kashif@katrust.com', 'kashifoundation.com', '1945-04-22'), 
+(0441, 'Ujjain Shiksha Foundation', 'Ujjain', 1478524581, "ujjainf@Ushiksha.com", Null, '1970-08-24');
+
+INSERT INTO Borrowing(Borro_id,Borro_date, Due_date, Return_date, Overdue_Status, Mem_id, Research_id, Edu_Ins_id) VALUES
+(1011,'2024-02-12', '2024-06-12', '2024-06-13', True, 0222, Null, Null),
+(2022,'2023-12-10', '2024-06-10', '2024-06-11', False, Null, 0155, Null),
+(3033,'2024-01-23', '2024-05-23', '2024-05-24', False, 0333, Null, Null),
+(4044,'2024-04-18', '2024-10-18', '2024-10-19', False, Null, Null, 0331);
+
+ALTER TABLE Fines DROP FOREIGN KEY fines_ibfk_2; 
+ALTER TABLE Fines DROP FOREIGN KEY fines_ibfk_3; 
+ALTER TABLE Fines DROP FOREIGN KEY fines_ibfk_4; 
+
+ALTER TABLE Fines DROP COLUMN Mem_id;
+ALTER TABLE Fines DROP COLUMN Research_id;
+ALTER TABLE Fines DROP COLUMN Edu_Ins_id;
+
+INSERT INTO Fines(Fine_id,Fine_amount,Paid_status,Payment_date,Borro_id) VALUES
+(1101, 20, 'Unpaid', Null, 4044),
+(2202,10, 'Paid', '2024-05-25', 3033),
+(3303, 12, 'Unpaid', Null, 1011),
+(4404, 40, 'Unpaid', Null, 2022);
+
+ALTER TABLE Fines MODIFY Fine_amount INT;
+ALTER TABLE Fines MODIFY Fine_amount INT(30);
+
+INSERT INTO Authors(Author_id,Full_name,DOB,Nationality) VALUES
+(01, 'Ankur Bhatia', '1973-06-23','Indian'),
+(02, 'Tim hook', '1977-02-12', 'American'),
+(03, 'Jeff Sandro', '1982-04-10', 'United Kingdom'),
+(04, 'Simmi Naimi', '1989-08-21', 'Chinese');
+
+INSERT INTO Books_catalog(Book_id,Book_title,Publisher_Year,B_language) VALUES
+(101, 'Rainbow', '2021-02-07', 'English'),
+(202, 'Ikigai', '2005-05-10', 'Japanese'),
+(303, 'Vimanshastr', '0528-06-02', 'Sanskrut'),
+(404, 'The Reader', '1997-11-17', 'German');
+
+INSERT INTO Book_Authors(Author_id,Book_id) VALUES
+(01, 303),
+(04, 202),
+(02, 101),
+(03, 404);
+
+INSERT INTO Library_Staff(Staff_id,Full_name,Position,DOB,Email_id,Contact_number,Hire_date,Address) VALUES
+(110, 'Amol Kolhe', 'IT Head', '1989-07-16', 'amolkolhe@gmail.com', '981536543', '2022-10-14', 'Berlin'),
+(220, 'Jimmy Naik', 'Admin Head', '1982-04-02', 'jimmynaik@gmail.com', '981536547', '2021-11-04', 'Potsdam'),
+(330, 'Sam Lihito', 'Desk Associate', '1995-06-09', 'samlihito@gmail.com', '981536549', '2023-04-18', 'Berlin'),
+(440,'Emma Simini', 'Receptionist', '1998-12-25', 'emmasimini@gmail.com', '981536546', '2024-07-01', 'Werder');
+
+INSERT INTO Suppliers(Supplier_id,full_name,Contact_person,Contact_number,Email_id,Supplier_type,Address,Contract_start_date,Contract_end_date) Values
+(011, 'Sender GmbH', 'Shiv Kashi', 1425639875, 'shivkashi@sender.com', 'Books', 'Munich', '2018-03-01', '2025-03-30'),
+(022, 'Onetone GmbH', 'Samne Karve', 1425639874, 'samnekarve@onetone.com', 'CD & DVD', 'Hamburg', '2020-07-01', '2028-07-30'),
+(033, 'Atservice GmbH', 'Abhai Narke', 1425639873, 'abhainarke@atservice.com', 'Books', 'Frakfurt', '2019-10-01', '2024-10-30'),
+(044, 'Porter GmbH', 'Danke Gerte', 1425639872, 'dankegerte@atservice.com', 'stationary', 'Berlin', '2021-01-01', '2029-01-30');
+
+INSERT INTO Research_articles_papers(Re_id,Title,Institution_id,AuthorR_id,Publication_date,Access_type,Document_type) Values
+(10, 'AI related impact', 54, 453, '2016-07-01', 'Restricted', 'Thesis'),
+(11, 'Global warming impact', 98, 544, '2011-02-15', 'Public', 'Paper'),
+(22, 'Industry 4.0 will come soon', 88, 66, '2013-10-01', 'Public', 'Article'),
+(33, 'Data and technology', 25, 99, '2010-09-17', 'Restricted', 'Thesis');
+
+
+select* from Research_articles_papers;
